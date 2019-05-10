@@ -4,16 +4,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.camerakit.CameraKitView
-            android:id="@+id/camera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:keepScreenOn="true"
-            app:camera_flash="auto"
-            app:camera_facing="back"
-            app:camera_focus="continuous"
-            app:camera_permissions="camera" />
+
+        <com.camerakit.CameraKitView
+                android:id="@+id/camera"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:keepScreenOn="true"
+                app:camera_facing="back"
+                app:camera_focus="continuous"
+                app:camera_permissions="camera" />
+
+        <ImageView
+                android:id="@+id/img_captured"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0f0"
+                android:visibility="gone"/>
 
     <Button
             android:layout_width="wrap_content"
@@ -22,11 +29,7 @@
             android:layout_margin="60dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:onClick="captureImage"
             android:text="촬영"/>
-
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"/>
 
 </RelativeLayout>
