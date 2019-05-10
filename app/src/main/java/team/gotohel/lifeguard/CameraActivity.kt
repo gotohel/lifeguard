@@ -20,8 +20,6 @@ class CameraActivity : AppCompatActivity() {
 
 //    var savedPhoto: File? = null
     fun captureImage(view: View) {
-
-        Log.d("테스트", "capture start")
         camera.captureImage { cameraKitView, capturedImage ->
             val folder = File(getExternalStorageDirectory(), "lifeguard")
             if (!folder.exists()) {
