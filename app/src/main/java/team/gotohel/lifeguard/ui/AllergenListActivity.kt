@@ -53,8 +53,8 @@ class AllergenListActivity: AppCompatActivity() {
             content_empty.visibility = View.GONE
             content_list.visibility = View.VISIBLE
         }
+        text_detail_allergen_list.text = ("${allergenList?.size ?: 0} ingredients causing allergies.")
         allergenListAdapter.setList(allergenList ?: listOf())
-
     }
 
     private var permissionHelper: PermissionHelper? = null

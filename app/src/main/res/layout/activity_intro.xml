@@ -60,7 +60,7 @@
             android:onClick="goToAllergyListActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="@dimen/fab_horizontal_margin"
             android:layout_marginVertical="48dp"
             android:layout_gravity="end|bottom"
             app:srcCompat="@drawable/ic_baseline_arrow_forward_24_px"/>
