@@ -35,11 +35,12 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
     implementation "io.reactivex.rxjava2:rxjava:2.1.8"
 
-    implementation "com.squareup.retrofit2:retrofit:2.4.0"
+    implementation "com.squareup.retrofit2:retrofit:2.5.0"
     implementation "com.squareup.retrofit2:converter-gson:2.4.0"
+    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
 
-    implementation "com.squareup.okhttp3:okhttp:3.11.0"
+    implementation "com.squareup.okhttp3:okhttp:3.12.0"
     implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
 
     // camera
@@ -50,6 +51,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
+
+    implementation 'org.jsoup:jsoup:1.8.3'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

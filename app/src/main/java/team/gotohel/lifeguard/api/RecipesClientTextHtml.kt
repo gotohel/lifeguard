@@ -6,15 +6,18 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import org.jsoup.Jsoup
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Path
 import team.gotohel.lifeguard.BuildConfig
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by HwaminSon on 2018-02-27.
@@ -26,23 +29,43 @@ import java.util.concurrent.TimeUnit
  * path -> @Path
  */
 
-class RecipesClient() {
+class RecipesClientTextHtml() {
 
     companion object {
         private val BASE_URL_API_SERVER_DEFAULT = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/"
 
-        private var apiClient: RecipesClient? = null
-        fun getInstance(): RecipesClient {
+        private var apiClient: RecipesClientTextHtml? = null
+        fun getInstance(): RecipesClientTextHtml {
             if (apiClient == null) {
-                apiClient = RecipesClient()
+                apiClient = RecipesClientTextHtml()
             }
             return apiClient!!
+        }
+
+        fun getContentsFromWeb(html: String): Single<List<Pair<String, String?>>> {
+            return Single.create<List<Pair<String, String?>>> {
+                try {
+                    // 해당 웹페이지의 document
+                    val document = Jsoup.parse(html)
+                    val r =  document.select(".spoonacular-name")
+                        .map {
+                            val name = it.html()
+                            val metric = it.parent().select(".spoonacular-metric").firstOrNull()?.html()
+                            Pair(name, metric)
+                        }
+
+                    it.onSuccess(r)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    if (!it.isDisposed) it.onError(e)
+                }
+            }
         }
     }
 
     interface APIService {
-        @GET("recipes/search")
-        fun searchRecipes(@Query("query") query: String): Single<RecipesResponse>
+        @GET("recipes/{recipesId}/ingredientWidget")
+        fun getIngredientByRecipes(@Path("recipesId") recipesId: Int): Single<String>
     }
 
     var retrofit: Retrofit
@@ -51,8 +74,8 @@ class RecipesClient() {
 
     init {
         okHttpClient = OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .addInterceptor(AuthenticationInterceptor())
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .addInterceptor(AuthenticationInterceptor())
 
         val logging = HttpLoggingInterceptor()
         if (BuildConfig.DEBUG) { // development build
@@ -65,11 +88,11 @@ class RecipesClient() {
 
         //set normal rest adapter
         retrofit = Retrofit.Builder()
-                .client(okHttpClient.build())
-                .baseUrl(BASE_URL_API_SERVER_DEFAULT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
+            .client(okHttpClient.build())
+            .baseUrl(BASE_URL_API_SERVER_DEFAULT)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
 
         call = retrofit.create(APIService::class.java)
     }
@@ -83,8 +106,8 @@ class RecipesClient() {
                 val authorized = raw.newBuilder()
                     .addHeader("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
                     .addHeader("X-RapidAPI-Key", "53d35b92b9mshd54982400472c00p14f890jsn4f68762441b2")
-                    .addHeader("Accept", "application/json")
-                        .build()
+                    .addHeader("Accept", "text/html")
+                    .build()
 
                 val response = chain.proceed(authorized)
 

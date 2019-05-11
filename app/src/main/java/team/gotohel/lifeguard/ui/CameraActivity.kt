@@ -1,6 +1,7 @@
 package team.gotohel.lifeguard.ui
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Environment.getExternalStorageDirectory
 import android.util.Base64
@@ -13,13 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_camera.*
 import team.gotohel.lifeguard.R
-import team.gotohel.lifeguard.api.ClarifaiClient
-import team.gotohel.lifeguard.api.ClarifaiUploadModel
-import team.gotohel.lifeguard.api.RecipesClient
+import team.gotohel.lifeguard.api.*
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.Exception
@@ -35,6 +35,9 @@ class CameraActivity : AppCompatActivity() {
     }
 
     var currentMode: MODE? = null
+
+    var savedImageFileName: String? = null
+    var ingredientListResult: List<Pair<String, String?>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +61,8 @@ class CameraActivity : AppCompatActivity() {
                 // food name 확인
                 val encoded = Base64.encodeToString(data, Base64.DEFAULT);
                 ClarifaiClient.getInstance().call.getFoodInfoFromImage(ClarifaiUploadModel(encoded))
-                    .flatMap { response ->
-                        val conceptList = response.outputs?.firstOrNull()?.data?.concepts
+                    .flatMap { clarifaiResponseModel ->
+                        val conceptList = clarifaiResponseModel.outputs?.firstOrNull()?.data?.concepts
                         Log.d("테스트", "결과1 = ${conceptList?.map { it.name }?.joinToString(", ")}")
 
                         val firstName = conceptList?.firstOrNull()?.name
@@ -69,31 +72,41 @@ class CameraActivity : AppCompatActivity() {
                             throw Exception("이미지 인식 실패")
                         }
                     }
+                    .flatMap {  recipesResponse ->
+                        Log.d("테스트", "결과2 = ${recipesResponse.results?.map { it.title }?.joinToString(",")}")
+                        val recipesId = recipesResponse.results?.firstOrNull()?.id
+                        if (recipesId != null) {
+                            RecipesClientTextHtml.getInstance().call.getIngredientByRecipes(recipesId)
+                        } else {
+                            throw Exception("레시피 조회 실패")
+                        }
+                    }
+                    .flatMap { html ->
+                        RecipesClientTextHtml.getContentsFromWeb(html)
+                    }
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { response, e ->
-                        if (response != null) {
-                                Toast.makeText(this@CameraActivity, "recipes result = ${response.results?.map { it.id }?.joinToString(",")}", Toast.LENGTH_SHORT).show()
-                                Log.d("테스트", "결과2 = ${response.results?.map { it.title }?.joinToString(",")}")
+                    .subscribe { ingredientList, e ->
+                        if (ingredientList != null) {
+                            Toast.makeText(this@CameraActivity, "Ingredient result = $ingredientList", Toast.LENGTH_SHORT).show()
+                            Log.d("테스트", "결과3 = Ingredient result =  ${ingredientList.joinToString(", ")}")
+                            ingredientListResult = ingredientList
+                            checkResultAndGoToNextActivity()
                         }
                         e?.printStackTrace()
                     }
 
-                // 이미지 표시
-                val folder = File(getExternalStorageDirectory(), "lifeguard")
-                if (!folder.exists()) {
-                    folder.mkdir()
-                }
-                val savedPhoto = File(folder, "${System.currentTimeMillis()}.jpg")
-                try {
-                    val outputStream = FileOutputStream(savedPhoto.path)
-                    outputStream.write(data)
-                    outputStream.close()
-                    Glide.with(this@CameraActivity).load(savedPhoto).into(img_captured)
-                    img_captured.visibility = View.VISIBLE
-                } catch (e: java.io.IOException) {
-                    e.printStackTrace()
-                }
+                // 이미지 저장
+                saveImageToFile(data)
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { fileName, e ->
+                        if (fileName != null) {
+                            savedImageFileName = fileName
+                            checkResultAndGoToNextActivity()
+                        }
+                        e?.printStackTrace()
+                    }
             }
         })
 
@@ -127,10 +140,47 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    fun saveImageToFile(data: ByteArray): Single<String> {
+        return Single.create {
+            val folder = File(getExternalStorageDirectory(), "lifeguard")
+            if (!folder.exists()) {
+                folder.mkdir()
+            }
+            val fileName = System.currentTimeMillis().toString()
+            val savedPhoto = File(folder, "$fileName.jpg")
+            try {
+                val outputStream = FileOutputStream(savedPhoto.path)
+                outputStream.write(data)
+                outputStream.close()
+
+                img_captured.visibility = View.VISIBLE
+                Glide.with(this@CameraActivity).load(savedPhoto).into(img_captured)
+
+                it.onSuccess(fileName)
+            } catch (e: java.io.IOException) {
+                e.printStackTrace()
+                it.onError(e)
+            }
+        }
+    }
+
+    fun checkResultAndGoToNextActivity() {
+        Log.d("테스트", "checkResultAndGoToNextActivity")
+        if (savedImageFileName != null && ingredientListResult != null) {
+            Toast.makeText(this, "고고고고", Toast.LENGTH_SHORT).show()
+        } else {
+            Log.d("테스트", "checkResultAndGoToNextActivity failed")
+        }
+    }
+
     //    var savedPhoto: File? = null
     fun captureImage(view: View) {
         Log.d("테스트", "capture Image")
+        savedImageFileName = null
+        ingredientListResult = null
         camera2.takePicture()
+        progress_bar.indeterminateDrawable.setColorFilter(resources.getColor(R.color.red_main), PorterDuff.Mode.MULTIPLY)
+        part_progress_recognizing.visibility = View.VISIBLE
     }
 
     fun finishActivity(view: View) {

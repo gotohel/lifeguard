@@ -12,22 +12,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    <!--<com.camerakit.CameraKitView-->
-            <!--android:id="@+id/camera"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:adjustViewBounds="true"-->
-            <!--android:keepScreenOn="true"-->
-            <!--app:camera_facing="back"-->
-            <!--app:camera_focus="continuous"-->
-            <!--app:camera_permissions="camera" />-->
-
     <ImageView
             android:id="@+id/img_captured"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="#0f0"
+            android:background="#ffffff"
             android:visibility="gone"/>
 
     <FrameLayout
@@ -187,5 +177,50 @@
                 app:elevation="0dp"/>
 
     </LinearLayout>
+
+    <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/part_progress_recognizing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="8dp"
+                android:layout_gravity="center">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="20dp">
+
+                <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:text="Recognizing.."/>
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </FrameLayout>
 
 </RelativeLayout>
