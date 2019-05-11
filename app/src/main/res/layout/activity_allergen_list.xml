@@ -16,7 +16,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="18dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/noto_sans_kr_bold_hestia"
                 android:textSize="25sp"
                 android:text="My Food Allergens"/>
@@ -28,6 +28,7 @@
                 android:layout_marginHorizontal="18dp"
                 android:textColor="@color/gray"
                 android:textSize="15sp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/noto_sans_kr_regular_hestia"
                 tools:text="5 ingredients causing allergies."/>
 
@@ -41,18 +42,18 @@
             <EditText
                     android:id="@+id/edit_new_allergen"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="60dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="40dp"
-                    android:textSize="12sp"
-                    android:hint="Add your food allergen…"
+                    android:textSize="16sp"
+                    android:hint="Add your food allergen..."
                     android:background="@color/white"/>
 
             <ImageButton
                     android:onClick="addAllergen"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_margin="5dp"
+                    android:layout_margin="10dp"
                     android:layout_gravity="center_vertical|end"
                     android:background="@drawable/circle_red"
                     app:srcCompat="@drawable/ic_add_black_24dp"/>

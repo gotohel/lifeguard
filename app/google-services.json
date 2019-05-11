@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "345181604254",
+    "firebase_url": "https://lifeguard-1fc04.firebaseio.com",
+    "project_id": "lifeguard-1fc04",
+    "storage_bucket": "lifeguard-1fc04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345181604254:android:90b5267934b39991",
+        "android_client_info": {
+          "package_name": "team.gotohel.lifeguard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345181604254-8mbdtgpp6s3g4n5hf6osvh7lj18p53vr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "team.gotohel.lifeguard",
+            "certificate_hash": "ab34ec476f888cfaacc9dc3a037216ea3aede40d"
+          }
+        },
+        {
+          "client_id": "345181604254-f7ga0i76op5bnpaksvbtmia6n6to1ldr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCOnibWLD0jUbZgXkvHrdsBe_4Rzuf3kU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345181604254-f7ga0i76op5bnpaksvbtmia6n6to1ldr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
