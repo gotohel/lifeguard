@@ -1,12 +1,13 @@
-package team.gotohel.lifeguard
+package team.gotohel.lifeguard.ui
 
-import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_allergen_list.view.*
+import team.gotohel.lifeguard.MyPreference
+import team.gotohel.lifeguard.R
 
 class AllergenListAdapter(val allergenListActivity: AllergenListActivity): RecyclerView.Adapter<AllergenListAdapter.AllergenListItemViewHolder>() {
 
@@ -31,7 +32,13 @@ class AllergenListAdapter(val allergenListActivity: AllergenListActivity): Recyc
     class AllergenListItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllergenListItemViewHolder {
-        return AllergenListItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_allergen_list, parent, false))
+        return AllergenListItemViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_allergen_list,
+                parent,
+                false
+            )
+        )
     }
 
 

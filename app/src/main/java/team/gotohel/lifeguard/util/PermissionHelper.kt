@@ -1,4 +1,4 @@
-package team.gotohel.lifeguard
+package team.gotohel.lifeguard.util
 
 
 import android.annotation.TargetApi
@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.TextView
+import team.gotohel.lifeguard.R
 
 import java.util.ArrayList
 
@@ -32,7 +33,12 @@ class PermissionHelper private constructor(
         const val REQUEST_CODE_PERMISSION = 0
 
         fun createAndDo(activity: Activity, snackbarParentView: View?, requiredPermissions: Array<String>, permissionCallback: () -> Unit): PermissionHelper {
-            val permissionHelper = PermissionHelper(activity, snackbarParentView, requiredPermissions, permissionCallback)
+            val permissionHelper = PermissionHelper(
+                activity,
+                snackbarParentView,
+                requiredPermissions,
+                permissionCallback
+            )
             permissionHelper.requestPermissionAndDoNext()
             return permissionHelper
         }
@@ -44,7 +50,9 @@ class PermissionHelper private constructor(
             // 권한을 가지고 하는 행동.
             permissionCallback.invoke()
         } else {
-            ActivityCompat.requestPermissions(activity, deniedPermissionList, REQUEST_CODE_PERMISSION)
+            ActivityCompat.requestPermissions(activity, deniedPermissionList,
+                REQUEST_CODE_PERMISSION
+            )
         }
     }
 
@@ -82,7 +90,9 @@ class PermissionHelper private constructor(
             buttonView.setTextColor(activity.resources.getColor(R.color.colorPrimary))
 
             if (showRationale) {
-                snackbar.setAction("권한 수락") { _ -> ActivityCompat.requestPermissions(activity, deniedPermissionList, REQUEST_CODE_PERMISSION) }
+                snackbar.setAction("권한 수락") { _ -> ActivityCompat.requestPermissions(activity, deniedPermissionList,
+                    REQUEST_CODE_PERMISSION
+                ) }
                         .show()
             } else {
                 snackbar.setAction("수동 권한 설정") { _ ->

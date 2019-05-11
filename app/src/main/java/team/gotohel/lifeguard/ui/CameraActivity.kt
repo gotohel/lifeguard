@@ -1,13 +1,13 @@
-package team.gotohel.lifeguard
+package team.gotohel.lifeguard.ui
 
 import android.os.Bundle
-import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_camera.*
 import android.os.Environment.getExternalStorageDirectory
 import android.util.Log
 import com.bumptech.glide.Glide
+import team.gotohel.lifeguard.R
 import java.io.File
 import java.io.FileOutputStream
 

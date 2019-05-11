@@ -14,7 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".IntroActivity"
+                android:name=".ui.IntroActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,13 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AllergenListActivity"
+        <activity android:name=".ui.AllergenListActivity"
                   android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ScrollingActivity"
+        <activity android:name=".ui.ScrollingActivity"
                   android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".CameraActivity"
+        <activity android:name=".ui.CameraActivity"
                   android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar"/>
     </application>

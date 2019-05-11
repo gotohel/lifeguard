@@ -1,4 +1,4 @@
-package team.gotohel.lifeguard
+package team.gotohel.lifeguard.api
 
 import android.util.Log
 import io.reactivex.Single
@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import team.gotohel.lifeguard.BuildConfig
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException

@@ -1,4 +1,4 @@
-package team.gotohel.lifeguard
+package team.gotohel.lifeguard.ui
 
 import android.Manifest
 import android.content.Intent
@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_allergen_list.*
+import team.gotohel.lifeguard.MyPreference
+import team.gotohel.lifeguard.util.PermissionHelper
+import team.gotohel.lifeguard.R
 
 class AllergenListActivity: AppCompatActivity() {
 
@@ -61,11 +64,13 @@ class AllergenListActivity: AppCompatActivity() {
     }
 
     fun startCamera(view: View) {
-        permissionHelper = PermissionHelper.createAndDo(this, view, arrayOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )) {
+        permissionHelper = PermissionHelper.createAndDo(
+            this, view, arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        ) {
             startActivity(Intent(this, CameraActivity::class.java))
         }
     }

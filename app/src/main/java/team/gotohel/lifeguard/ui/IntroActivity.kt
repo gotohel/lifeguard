@@ -1,4 +1,4 @@
-package team.gotohel.lifeguard
+package team.gotohel.lifeguard.ui
 
 import android.content.Intent
 import android.graphics.Color
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
+import team.gotohel.lifeguard.R
 
 class IntroActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
