@@ -19,8 +19,10 @@ import kotlinx.android.synthetic.main.activity_camera.*
 import team.gotohel.lifeguard.R
 import team.gotohel.lifeguard.api.ClarifaiClient
 import team.gotohel.lifeguard.api.ClarifaiUploadModel
+import team.gotohel.lifeguard.api.RecipesClient
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.Exception
 
 class CameraActivity : AppCompatActivity() {
     companion object {
@@ -56,13 +58,23 @@ class CameraActivity : AppCompatActivity() {
                 // food name 확인
                 val encoded = Base64.encodeToString(data, Base64.DEFAULT);
                 ClarifaiClient.getInstance().call.getFoodInfoFromImage(ClarifaiUploadModel(encoded))
+                    .flatMap { response ->
+                        val conceptList = response.outputs?.firstOrNull()?.data?.concepts
+                        Log.d("테스트", "결과1 = ${conceptList?.map { it.name }?.joinToString(", ")}")
+
+                        val firstName = conceptList?.firstOrNull()?.name
+                        if (firstName != null) {
+                            RecipesClient.getInstance().call.searchRecipes(firstName)
+                        } else {
+                            throw Exception("이미지 인식 실패")
+                        }
+                    }
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { response, e ->
                         if (response != null) {
-                            val conceptList = response.outputs?.firstOrNull()?.data?.concepts
-                            Toast.makeText(this@CameraActivity, "결과 = ${conceptList?.map { it.name }?.joinToString(", ")}", Toast.LENGTH_SHORT).show()
-
+                                Toast.makeText(this@CameraActivity, "recipes result = ${response.results?.map { it.id }?.joinToString(",")}", Toast.LENGTH_SHORT).show()
+                                Log.d("테스트", "결과2 = ${response.results?.map { it.title }?.joinToString(",")}")
                         }
                         e?.printStackTrace()
                     }
