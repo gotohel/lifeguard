@@ -21,8 +21,8 @@ class IntroActivity: AppCompatActivity() {
 //        }
         setContentView(R.layout.activity_intro)
 
-        finish()
-        startActivity(Intent(this, CameraActivity::class.java))
+//        finish()
+//        startActivity(Intent(this, CameraActivity::class.java))
     }
 
     fun goToAllergyListActivity(view: View) {
