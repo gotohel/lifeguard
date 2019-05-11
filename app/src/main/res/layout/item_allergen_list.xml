@@ -5,6 +5,11 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
+    <View
+            android:id="@+id/view_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
     <TextView
             android:id="@+id/text_allergen_name"
             android:layout_width="match_parent"
@@ -15,8 +20,14 @@
             android:foreground="?selectableItemBackground"/>
 
     <View
+            android:id="@+id/view_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#979797"/>
+            android:background="#66979797"/>
+
+    <View
+            android:id="@+id/view_margin_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"/>
 
 </LinearLayout>

@@ -46,7 +46,7 @@ class AllergenListAdapter(val allergenListActivity: AllergenListActivity): Recyc
 
         holder.itemView.text_allergen_name.text = allergenList[position]
 
-        holder.itemView.setOnLongClickListener {
+        holder.itemView.text_allergen_name.setOnLongClickListener {
             AlertDialog.Builder(allergenListActivity)
                 .setTitle("DELETE")
                 .setMessage("Do you want delete '${allergenList[position]}'?")
@@ -56,5 +56,18 @@ class AllergenListAdapter(val allergenListActivity: AllergenListActivity): Recyc
             return@setOnLongClickListener true
         }
 
+        if (position == 0) {
+            holder.itemView.view_margin_top.visibility = View.VISIBLE
+        } else {
+            holder.itemView.view_margin_top.visibility = View.GONE
+        }
+
+        if (position == allergenList.size-1) {
+            holder.itemView.view_divider.visibility = View.GONE
+            holder.itemView.view_margin_bottom.visibility = View.VISIBLE
+        } else {
+            holder.itemView.view_divider.visibility = View.VISIBLE
+            holder.itemView.view_margin_bottom.visibility = View.GONE
+        }
     }
 }
