@@ -11,6 +11,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:keepScreenOn="true"
+                app:camera_flash="auto"
                 app:camera_facing="back"
                 app:camera_focus="continuous"
                 app:camera_permissions="camera" />

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/text_allergen_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingHorizontal="4dp"
+            android:gravity="center_vertical"
+            tools:text="알러지 이름"
+            android:foreground="?selectableItemBackground"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#979797"/>
+
+</LinearLayout>
