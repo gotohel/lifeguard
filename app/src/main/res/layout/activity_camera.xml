@@ -1,36 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:background="#837070">
+
+
+    <com.camerakit.CameraKitView
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:keepScreenOn="true"
+            app:camera_facing="back"
+            app:camera_focus="continuous"
+            app:camera_permissions="camera" />
+
+    <ImageView
+            android:id="@+id/img_captured"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#0f0"
+            android:visibility="gone"/>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:id="@+id/part_food_capture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="174dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:text="Take a picture of foods with allergies."/>
+
+        </LinearLayout>
+
+        <FrameLayout
+                android:id="@+id/part_barcode_scan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        <com.camerakit.CameraKitView
-                android:id="@+id/camera"
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="#80000000"/>
+
+                <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                        <View
+                                android:layout_width="28dp"
+                                android:layout_height="match_parent"
+                                android:background="#80000000"/>
+
+                        <View
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent"/>
+
+                        <View
+                                android:layout_width="28dp"
+                                android:layout_height="match_parent"
+                                android:background="#80000000"/>
+
+                    </LinearLayout>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@color/red_main"/>
+
+                </FrameLayout>
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="#80000000"/>
+
+
+            </LinearLayout>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="174dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:text="Take a barcode for foods\nwith allergy ingredients."/>
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="60dp"
+            android:paddingBottom="48dp">
+
+        <ImageButton
+                android:onClick="finishActivity"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_arrow_left_white_24dp"
+                android:background="@color/transparent"/>
+
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:keepScreenOn="true"
-                app:camera_flash="auto"
-                app:camera_facing="back"
-                app:camera_focus="continuous"
-                app:camera_permissions="camera" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:baselineAligned="true">
 
-        <ImageView
-                android:id="@+id/img_captured"
+            <TextView
+                    android:id="@+id/btn_food_capture"
+                    android:onClick="changeToFoodCaptureMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingHorizontal="10dp"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/noto_sans_kr_bold_hestia"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:text="Food Capture"/>
+
+            <TextView
+                    android:id="@+id/btn_barcode_scan"
+                    android:onClick="changeToBarcodeScanMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingHorizontal="10dp"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/noto_sans_kr_bold_hestia"
+                    android:textColor="#FFFFFF"
+                    android:alpha="0.5"
+                    android:textSize="13sp"
+                    android:text="Barcode Scan"/>
+
+        </LinearLayout>
+
+        <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#0f0"
-                android:visibility="gone"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:layout_margin="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="captureImage"
-            android:text="촬영"/>
+        <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="28dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/circle_gray"
+                android:onClick="captureImage"
+                app:maxImageSize="65dp"
+                app:fabCustomSize="85dp"
+                app:elevation="0dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

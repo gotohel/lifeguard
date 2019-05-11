@@ -22,7 +22,7 @@ class IntroActivity: AppCompatActivity() {
         setContentView(R.layout.activity_intro)
 
         finish()
-        startActivity(Intent(this, AllergenListActivity::class.java))
+        startActivity(Intent(this, CameraActivity::class.java))
     }
 
     fun goToAllergyListActivity(view: View) {
