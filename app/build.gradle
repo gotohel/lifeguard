@@ -51,9 +51,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
 
-    // image to food name
-    implementation 'com.clarifai.clarifai-api2:core:2.3.0'
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

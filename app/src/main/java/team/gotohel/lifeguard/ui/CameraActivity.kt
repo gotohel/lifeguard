@@ -2,18 +2,23 @@ package team.gotohel.lifeguard.ui
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.view.View
-import kotlinx.android.synthetic.main.activity_camera.*
 import android.os.Environment.getExternalStorageDirectory
+import android.util.Base64
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.camerakit.CameraKitView
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_camera.*
 import team.gotohel.lifeguard.R
+import team.gotohel.lifeguard.api.ClarifaiClient
+import team.gotohel.lifeguard.api.ClarifaiUploadModel
 import java.io.File
 import java.io.FileOutputStream
 
@@ -42,25 +47,29 @@ class CameraActivity : AppCompatActivity() {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
 
-                // Picture was taken!
-                // If planning to show a Bitmap, we will take care of
-                // EXIF rotation and background threading for you...
 //                result.toBitmap(maxWidth, maxHeight, callback)
-
-                // If planning to save a file on a background thread,
-                // just use toFile. Ensure you have permissions.
 //                result.toFile(file, callback)
 
                 // Access the raw data if needed.
                 val data = result.data
 
+                // food name 확인
+                val encoded = Base64.encodeToString(data, Base64.DEFAULT);
+                ClarifaiClient.getInstance().call.getFoodInfoFromImage(ClarifaiUploadModel(encoded))
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { response, e ->
+                        if (response != null) {
+                            val conceptList = response.outputs?.firstOrNull()?.data?.concepts
+                            Toast.makeText(this@CameraActivity, "결과 = ${conceptList?.map { it.name }?.joinToString(", ")}", Toast.LENGTH_SHORT).show()
 
+                        }
+                        e?.printStackTrace()
+                    }
 
-
-                Log.d("테스트", "capture Image received")
+                // 이미지 표시
                 val folder = File(getExternalStorageDirectory(), "lifeguard")
                 if (!folder.exists()) {
-                    Log.d("테스트", "folder is not exist")
                     folder.mkdir()
                 }
                 val savedPhoto = File(folder, "${System.currentTimeMillis()}.jpg")
@@ -70,12 +79,9 @@ class CameraActivity : AppCompatActivity() {
                     outputStream.close()
                     Glide.with(this@CameraActivity).load(savedPhoto).into(img_captured)
                     img_captured.visibility = View.VISIBLE
-                    Log.d("테스트", "file load success")
                 } catch (e: java.io.IOException) {
-                    Log.d("테스트", "error")
                     e.printStackTrace()
                 }
-
             }
         })
 
