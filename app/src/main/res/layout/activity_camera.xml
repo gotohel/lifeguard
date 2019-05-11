@@ -6,16 +6,21 @@
                 android:layout_height="match_parent"
                 tools:background="#837070">
 
-
-    <com.camerakit.CameraKitView
-            android:id="@+id/camera"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
+    <com.otaliastudios.cameraview.CameraView
+            android:id="@+id/camera2"
             android:keepScreenOn="true"
-            app:camera_facing="back"
-            app:camera_focus="continuous"
-            app:camera_permissions="camera" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    <!--<com.camerakit.CameraKitView-->
+            <!--android:id="@+id/camera"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:keepScreenOn="true"-->
+            <!--app:camera_facing="back"-->
+            <!--app:camera_focus="continuous"-->
+            <!--app:camera_permissions="camera" />-->
 
     <ImageView
             android:id="@+id/img_captured"
@@ -169,7 +174,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="28dp"

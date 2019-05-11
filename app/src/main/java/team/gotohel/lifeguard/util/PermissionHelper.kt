@@ -9,9 +9,9 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.TextView
 import team.gotohel.lifeguard.R
@@ -84,10 +84,7 @@ class PermissionHelper private constructor(
 
         snackbarParentView?.let { parentView ->
             val snackbar = Snackbar.make(parentView, if (showRationale) errorMessage else finalErrorMessage, Snackbar.LENGTH_INDEFINITE)
-            val textView = snackbar.view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
-            val buttonView = snackbar.view.findViewById<TextView>(android.support.design.R.id.snackbar_action)
-            textView.setTextColor(Color.WHITE)
-            buttonView.setTextColor(activity.resources.getColor(R.color.colorPrimary))
+            snackbar.setActionTextColor(activity.resources.getColor(R.color.colorPrimary))
 
             if (showRationale) {
                 snackbar.setAction("권한 수락") { _ -> ActivityCompat.requestPermissions(activity, deniedPermissionList,
