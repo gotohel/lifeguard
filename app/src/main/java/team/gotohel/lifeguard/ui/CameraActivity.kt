@@ -67,6 +67,8 @@ class CameraActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_camera)
 
+        progress_bar.indeterminateDrawable.setColorFilter(resources.getColor(R.color.red_main), PorterDuff.Mode.MULTIPLY)
+
         firebaseVisionBarcodeDetectorOptions = FirebaseVisionBarcodeDetectorOptions.Builder()
             .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_ALL_FORMATS).build()
 
@@ -179,9 +181,10 @@ class CameraActivity : AppCompatActivity() {
 
                                             ingredientListResult = ingredientList
                                             checkResultAndGoToNextActivity()
+                                        } else {
+                                            initCamera()
                                         }
                                         e?.printStackTrace()
-
                                     }
                             } else {
                                 Toast.makeText(this@CameraActivity, "can not found barcode", Toast.LENGTH_SHORT).show()
@@ -193,6 +196,14 @@ class CameraActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    fun initCamera() {
+        savedImageFileName = null
+        ingredientListResult = null
+        img_captured.setImageDrawable(null)
+        img_captured.visibility = View.GONE
+        part_progress_recognizing.visibility = View.GONE
     }
 
     fun changeToFoodCaptureMode(view: View? = null) {
@@ -266,7 +277,6 @@ class CameraActivity : AppCompatActivity() {
         savedImageFileName = null
         ingredientListResult = null
         camera2.takePicture()
-        progress_bar.indeterminateDrawable.setColorFilter(resources.getColor(R.color.red_main), PorterDuff.Mode.MULTIPLY)
         part_progress_recognizing.visibility = View.VISIBLE
     }
 

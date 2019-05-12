@@ -20,7 +20,7 @@ class ResultListAdapter(val context: Context, val imageFileName: String, val ing
 
         val myAllergenList = MyPreference.savedAllergenList
         warningList = ingredientList.map { it.first }.filter { ingredient ->
-            myAllergenList?.contains(ingredient) == true
+            myAllergenList?.any { ingredient.contains(it) } == true
         }
     }
 
