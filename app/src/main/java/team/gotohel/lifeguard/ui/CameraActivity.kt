@@ -27,6 +27,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_camera.*
+import team.gotohel.lifeguard.MyApplication
 import team.gotohel.lifeguard.R
 import team.gotohel.lifeguard.api.*
 import team.gotohel.lifeguard.ui.ResultActivity.Companion.KEY_IMAGE_FILE_NAME
@@ -135,11 +136,7 @@ class CameraActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { ingredientList, e ->
                             if (ingredientList != null) {
-                                Toast.makeText(
-                                    this@CameraActivity,
-                                    "Ingredient result = $ingredientList",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MyApplication.toastDebug("Ingredient result = $ingredientList")
                                 Log.d("테스트", "결과3 = Ingredient result =  ${ingredientList.joinToString(", ")}")
                                 ingredientListResult = ingredientList
                                 checkResultAndGoToNextActivity()
@@ -190,7 +187,7 @@ class CameraActivity : AppCompatActivity() {
                                         e?.printStackTrace()
                                     }
                             } else {
-                                Toast.makeText(this@CameraActivity, "can not found barcode", Toast.LENGTH_SHORT).show()
+                                MyApplication.toast("can not found barcode")
                             }
                         }
                     }.addOnFailureListener {
@@ -202,7 +199,7 @@ class CameraActivity : AppCompatActivity() {
     }
 
     fun detectFailed() {
-        Toast.makeText(this, "failed.. ", Toast.LENGTH_SHORT).show()
+        MyApplication.toast("failed...")
         savedImageFileName = null
         ingredientListResult = null
         img_captured.setImageDrawable(null)

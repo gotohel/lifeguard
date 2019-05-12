@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_allergen_list.*
+import team.gotohel.lifeguard.MyApplication
 import team.gotohel.lifeguard.MyPreference
 import team.gotohel.lifeguard.util.PermissionHelper
 import team.gotohel.lifeguard.R
@@ -34,9 +35,9 @@ class AllergenListActivity: AppCompatActivity() {
         val newAllergen = edit_new_allergen.text.toString().trim()
 
         if (newAllergen.isEmpty()) {
-            Toast.makeText(this, "empty!", Toast.LENGTH_SHORT).show()
+            MyApplication.toast("empty")
         } else if (oldList?.contains(newAllergen) == true) {
-            Toast.makeText(this, "Already added", Toast.LENGTH_SHORT).show()
+            MyApplication.toast("Already added")
         } else {
             MyPreference.addAllergen(newAllergen)
             edit_new_allergen.setText("")

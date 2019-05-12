@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_result.*
+import team.gotohel.lifeguard.MyApplication
 import team.gotohel.lifeguard.R
 
 class ResultActivity: AppCompatActivity() {
@@ -33,7 +34,7 @@ class ResultActivity: AppCompatActivity() {
             list_result.adapter = resultListAdapter
 
         } else {
-            Toast.makeText(this, "error..", Toast.LENGTH_SHORT).show()
+            MyApplication.toast("error...")
             finish()
         }
     }
