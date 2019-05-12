@@ -9,14 +9,12 @@ import android.os.Bundle
 import android.os.Environment.getExternalStorageDirectory
 import android.util.Base64
 import android.util.Log
-import android.util.SparseArray
 import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector
@@ -100,6 +98,8 @@ class CameraActivity : AppCompatActivity() {
                         if (fileName != null) {
                             savedImageFileName = fileName
                             checkResultAndGoToNextActivity()
+                        } else {
+                            detectFailed()
                         }
                         e?.printStackTrace()
                     }
@@ -143,6 +143,8 @@ class CameraActivity : AppCompatActivity() {
                                 Log.d("테스트", "결과3 = Ingredient result =  ${ingredientList.joinToString(", ")}")
                                 ingredientListResult = ingredientList
                                 checkResultAndGoToNextActivity()
+                            } else {
+                                detectFailed()
                             }
                             e?.printStackTrace()
                         }
@@ -182,7 +184,7 @@ class CameraActivity : AppCompatActivity() {
                                             ingredientListResult = ingredientList
                                             checkResultAndGoToNextActivity()
                                         } else {
-                                            initCamera()
+                                            detectFailed()
                                         }
                                         e?.printStackTrace()
                                     }
@@ -198,7 +200,8 @@ class CameraActivity : AppCompatActivity() {
         })
     }
 
-    fun initCamera() {
+    fun detectFailed() {
+        Toast.makeText(this, "failed.. ", Toast.LENGTH_SHORT).show()
         savedImageFileName = null
         ingredientListResult = null
         img_captured.setImageDrawable(null)
