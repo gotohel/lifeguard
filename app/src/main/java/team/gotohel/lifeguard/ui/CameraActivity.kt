@@ -179,6 +179,7 @@ class CameraActivity : AppCompatActivity() {
                                                 .flatMap { it.split(".") }
                                                 .map { it.trim() }
                                                 .filter { it.isNotBlank() }
+                                                .distinct()
                                                 .map { Pair(it, null) }
 
                                             ingredientListResult = ingredientList
