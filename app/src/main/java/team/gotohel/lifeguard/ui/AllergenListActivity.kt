@@ -3,8 +3,10 @@ package team.gotohel.lifeguard.ui
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_allergen_list.*
 import team.gotohel.lifeguard.MyApplication
@@ -26,6 +28,14 @@ class AllergenListActivity: AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
         list_allergen.adapter = allergenListAdapter
+
+        edit_new_allergen.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addAllergen(v)
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
 
         refreshAllergenList()
     }

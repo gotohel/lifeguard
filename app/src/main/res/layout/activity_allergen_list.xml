@@ -47,6 +47,8 @@
                     android:paddingEnd="40dp"
                     android:textSize="16sp"
                     android:hint="Add an ingredient you are allergic to..."
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:background="@color/white"/>
 
             <ImageButton
