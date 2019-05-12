@@ -1,18 +1,28 @@
 package team.gotohel.lifeguard.ui
 
 import android.content.Intent
+import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Environment.getExternalStorageDirectory
 import android.util.Base64
 import android.util.Log
+import android.util.SparseArray
 import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
 import io.reactivex.Single
@@ -32,6 +42,9 @@ class CameraActivity : AppCompatActivity() {
         const val TEXT_SIZE_LARGE = 25F
         const val TEXT_SIZE_SMALL = 13F
         const val LIFEGUARD_FOLDER_NAME = "lifeguard"
+
+        val barcodeRecognitionMetadata: FirebaseVisionImageMetadata = FirebaseVisionImageMetadata.Builder()
+            .setRotation(FirebaseVisionImageMetadata.ROTATION_0).build()
     }
 
     enum class MODE {
@@ -39,20 +52,31 @@ class CameraActivity : AppCompatActivity() {
     }
 
     var currentMode: MODE? = null
+    private lateinit var firebaseVisionBarcodeDetectorOptions: FirebaseVisionBarcodeDetectorOptions
+    private lateinit var firebaseVisionBarcodeDetector: FirebaseVisionBarcodeDetector
 
     var savedImageFileName: String? = null
     var ingredientListResult: List<Pair<String, String?>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.apply {// in Activity's onCreate() for instance
+        window.apply {
+            // in Activity's onCreate() for instance
             setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             statusBarColor = Color.TRANSPARENT
         }
         setContentView(R.layout.activity_camera)
-        camera2.setLifecycleOwner(this);
 
-        camera2.addCameraListener(object: CameraListener() {
+        firebaseVisionBarcodeDetectorOptions = FirebaseVisionBarcodeDetectorOptions.Builder()
+            .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_ALL_FORMATS).build()
+
+        firebaseVisionBarcodeDetector = FirebaseVision.getInstance()
+            .getVisionBarcodeDetector(firebaseVisionBarcodeDetectorOptions)
+
+        camera2.setLifecycleOwner(this)
+
+        camera2.addCameraListener(object : CameraListener() {
+            @SuppressLint("CheckResult")
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
 
@@ -62,55 +86,90 @@ class CameraActivity : AppCompatActivity() {
                 // Access the raw data if needed.
                 val data = result.data
 
-                // food name 확인
-                val encoded = Base64.encodeToString(data, Base64.DEFAULT);
-                ClarifaiClient.getInstance().call.getFoodInfoFromImage(ClarifaiUploadModel(encoded))
-                    .flatMap { clarifaiResponseModel ->
-                        val conceptList = clarifaiResponseModel.outputs?.firstOrNull()?.data?.concepts
-                        Log.d("테스트", "결과1 = ${conceptList?.map { it.name }?.joinToString(", ")}")
+                if (currentMode == MODE.FOOD_CAPTURE) {
 
-                        val firstName = conceptList?.firstOrNull()?.name
-                        if (firstName != null) {
-                            RecipesClient.getInstance().call.searchRecipes(firstName)
-                        } else {
-                            throw Exception("이미지 인식 실패")
-                        }
-                    }
-                    .flatMap {  recipesResponse ->
-                        Log.d("테스트", "결과2 = ${recipesResponse.results?.map { it.title }?.joinToString(",")}")
-                        val recipesId = recipesResponse.results?.firstOrNull()?.id
-                        if (recipesId != null) {
-                            RecipesClientTextHtml.getInstance().call.getIngredientByRecipes(recipesId)
-                        } else {
-                            throw Exception("레시피 조회 실패")
-                        }
-                    }
-                    .flatMap { html ->
-                        RecipesClientTextHtml.getContentsFromWeb(html)
-                    }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { ingredientList, e ->
-                        if (ingredientList != null) {
-                            Toast.makeText(this@CameraActivity, "Ingredient result = $ingredientList", Toast.LENGTH_SHORT).show()
-                            Log.d("테스트", "결과3 = Ingredient result =  ${ingredientList.joinToString(", ")}")
-                            ingredientListResult = ingredientList
-                            checkResultAndGoToNextActivity()
-                        }
-                        e?.printStackTrace()
-                    }
+                    // food name 확인
+                    val encoded = Base64.encodeToString(data, Base64.DEFAULT);
+                    ClarifaiClient.getInstance().call.getFoodInfoFromImage(ClarifaiUploadModel(encoded))
+                        .flatMap { clarifaiResponseModel ->
+                            val conceptList = clarifaiResponseModel.outputs?.firstOrNull()?.data?.concepts
+                            Log.d("테스트", "결과1 = ${conceptList?.map { it.name }?.joinToString(", ")}")
 
-                // 이미지 저장
-                saveImageToFile(data)
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { fileName, e ->
-                        if (fileName != null) {
-                            savedImageFileName = fileName
-                            checkResultAndGoToNextActivity()
+                            val firstName = conceptList?.firstOrNull()?.name
+                            if (firstName != null) {
+                                RecipesClient.getInstance().call.searchRecipes(firstName)
+                            } else {
+                                throw Exception("이미지 인식 실패")
+                            }
                         }
-                        e?.printStackTrace()
+                        .flatMap { recipesResponse ->
+                            Log.d("테스트", "결과2 = ${recipesResponse.results?.map { it.title }?.joinToString(",")}")
+                            val recipesId = recipesResponse.results?.firstOrNull()?.id
+                            if (recipesId != null) {
+                                RecipesClientTextHtml.getInstance().call.getIngredientByRecipes(recipesId)
+                            } else {
+                                throw Exception("레시피 조회 실패")
+                            }
+                        }
+                        .flatMap { html ->
+                            RecipesClientTextHtml.getContentsFromWeb(html)
+                        }
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { ingredientList, e ->
+                            if (ingredientList != null) {
+                                Toast.makeText(
+                                    this@CameraActivity,
+                                    "Ingredient result = $ingredientList",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("테스트", "결과3 = Ingredient result =  ${ingredientList.joinToString(", ")}")
+                                ingredientListResult = ingredientList
+                                checkResultAndGoToNextActivity()
+                            }
+                            e?.printStackTrace()
+                        }
+
+                    // 이미지 저장
+                    saveImageToFile(data)
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { fileName, e ->
+                            if (fileName != null) {
+                                savedImageFileName = fileName
+                                checkResultAndGoToNextActivity()
+                            }
+                            e?.printStackTrace()
+                        }
+                } else {
+                    // 바코드
+                    firebaseVisionBarcodeDetector.detectInImage(
+                        FirebaseVisionImage.fromBitmap(
+                            BitmapFactory.decodeByteArray(
+                                data,
+                                0,
+                                data.size
+                            )
+                        )
+                    ).addOnSuccessListener { barcodeRecognitionMetadata ->
+                        for (x in 0 until barcodeRecognitionMetadata.size) {
+                            val barcode = barcodeRecognitionMetadata[x]
+                            val valueType = barcode.valueType
+
+                            Log.e("TEST", "asdf - ${valueType}")
+
+                            if (valueType == FirebaseVisionBarcode.TYPE_PRODUCT) {
+                                Toast.makeText(
+                                    this@CameraActivity,
+                                    "barcode number = ${barcode.rawValue}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }.addOnFailureListener {
+                        it.printStackTrace()
                     }
+                }
             }
         })
 
