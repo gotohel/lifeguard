@@ -1,7 +1,15 @@
 package team.gotohel.lifeguard.ui
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Environment
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +28,7 @@ class ResultListAdapter(val context: Context, val imageFileName: String, val ing
 
         val myAllergenList = MyPreference.savedAllergenList
         warningList = ingredientList.map { it.first }.filter { ingredient ->
-            myAllergenList?.any { ingredient.contains(it) } == true
+            myAllergenList?.any { ingredient.toLowerCase().contains(it.toLowerCase()) } == true
         }
     }
 
