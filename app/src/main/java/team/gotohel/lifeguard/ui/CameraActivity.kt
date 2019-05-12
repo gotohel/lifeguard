@@ -90,8 +90,19 @@ class CameraActivity : AppCompatActivity() {
                 // Access the raw data if needed.
                 val data = result.data
 
-                if (currentMode == MODE.FOOD_CAPTURE) {
+                // 이미지 저장
+                saveImageToFile(data)
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { fileName, e ->
+                        if (fileName != null) {
+                            savedImageFileName = fileName
+                            checkResultAndGoToNextActivity()
+                        }
+                        e?.printStackTrace()
+                    }
 
+                if (currentMode == MODE.FOOD_CAPTURE) {
                     // food name 확인
                     val encoded = Base64.encodeToString(data, Base64.DEFAULT);
                     ClarifaiClient.getInstance().call.getFoodInfoFromImage(ClarifaiUploadModel(encoded))
@@ -133,18 +144,6 @@ class CameraActivity : AppCompatActivity() {
                             }
                             e?.printStackTrace()
                         }
-
-                    // 이미지 저장
-                    saveImageToFile(data)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { fileName, e ->
-                            if (fileName != null) {
-                                savedImageFileName = fileName
-                                checkResultAndGoToNextActivity()
-                            }
-                            e?.printStackTrace()
-                        }
                 } else {
                     // 바코드
                     firebaseVisionBarcodeDetector.detectInImage(
@@ -162,12 +161,30 @@ class CameraActivity : AppCompatActivity() {
 
                             Log.e("TEST", "asdf - ${valueType}")
 
-                            if (valueType == FirebaseVisionBarcode.TYPE_PRODUCT) {
-                                Toast.makeText(
-                                    this@CameraActivity,
-                                    "barcode number = ${barcode.rawValue}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            if (valueType == FirebaseVisionBarcode.TYPE_PRODUCT && barcode.rawValue != null) {
+                                NutritionixClient.getInstance().call.searchFoodByUpc(barcode.rawValue!!)
+                                    .subscribeOn(Schedulers.newThread())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe { nutritionixResponse, e ->
+                                        if (nutritionixResponse != null) {
+                                            val ingredientList = nutritionixResponse.nf_ingredient_statement
+                                                .split(",")
+                                                .flatMap { it.split("(") }
+                                                .flatMap { it.split(")") }
+                                                .flatMap { it.split("and") }
+                                                .flatMap { it.split(".") }
+                                                .map { it.trim() }
+                                                .filter { it.isNotBlank() }
+                                                .map { Pair(it, null) }
+
+                                            ingredientListResult = ingredientList
+                                            checkResultAndGoToNextActivity()
+                                        }
+                                        e?.printStackTrace()
+
+                                    }
+                            } else {
+                                Toast.makeText(this@CameraActivity, "can not found barcode", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }.addOnFailureListener {
