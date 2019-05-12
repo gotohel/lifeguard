@@ -64,7 +64,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="13sp"
-                android:text="The food does not contain allergies\nthat react to your body."/>
+                android:text="It does not seem to contain your food allergen"/>
 
     </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:textSize="15sp"
-                android:text="Warning!"/>
+                android:text="Be Careful!"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="13sp"
-                android:text="The food contains allergies\nthat react to your body."/>
+                android:text="It may contain your food allergen: "/>
 
 
         <TextView

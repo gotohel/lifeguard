@@ -36,7 +36,7 @@
                     android:layout_marginTop="174dp"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:text="Take a picture of foods with allergies."/>
+                    android:text="Take a picture of your dish"/>
 
         </LinearLayout>
 
@@ -105,7 +105,7 @@
                     android:layout_marginTop="174dp"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:text="Take a barcode for foods\nwith allergy ingredients."/>
+                    android:text="Scan barcodes of a\nbranded food product"/>
 
         </FrameLayout>
 
