@@ -73,8 +73,12 @@ class CameraActivity : AppCompatActivity() {
         firebaseVisionBarcodeDetector = FirebaseVision.getInstance()
             .getVisionBarcodeDetector(firebaseVisionBarcodeDetectorOptions)
 
-        camera2.setLifecycleOwner(this)
+        initialCameraSettings()
+        changeToFoodCaptureMode()
+    }
 
+    private fun initialCameraSettings() {
+        camera2.setLifecycleOwner(this)
         camera2.addCameraListener(object : CameraListener() {
             @SuppressLint("CheckResult")
             override fun onPictureTaken(result: PictureResult) {
@@ -172,8 +176,6 @@ class CameraActivity : AppCompatActivity() {
                 }
             }
         })
-
-        changeToFoodCaptureMode()
     }
 
     fun changeToFoodCaptureMode(view: View? = null) {
