@@ -100,7 +100,7 @@ class CameraActivity : AppCompatActivity() {
                             savedImageFileName = fileName
                             checkResultAndGoToNextActivity()
                         } else {
-                            detectFailed()
+                            detectFailed("Can not save captured image")
                         }
                         e?.printStackTrace()
                     }
@@ -141,7 +141,7 @@ class CameraActivity : AppCompatActivity() {
                                 ingredientListResult = ingredientList
                                 checkResultAndGoToNextActivity()
                             } else {
-                                detectFailed()
+                                detectFailed(e?.message)
                             }
                             e?.printStackTrace()
                         }
@@ -182,7 +182,7 @@ class CameraActivity : AppCompatActivity() {
                                             ingredientListResult = ingredientList
                                             checkResultAndGoToNextActivity()
                                         } else {
-                                            detectFailed()
+                                            detectFailed(e?.message)
                                         }
                                         e?.printStackTrace()
                                     }
@@ -191,6 +191,7 @@ class CameraActivity : AppCompatActivity() {
                             }
                         }
                     }.addOnFailureListener {
+                        detectFailed("Can not find barcode in captured image")
                         it.printStackTrace()
                     }
                 }
@@ -198,8 +199,12 @@ class CameraActivity : AppCompatActivity() {
         })
     }
 
-    fun detectFailed() {
-        MyApplication.toast("failed...")
+    fun detectFailed(message: String? = null) {
+        if (message == null) {
+            MyApplication.toast("Detect failed...")
+        } else {
+            MyApplication.toast("Detect failed ($message)")
+        }
         savedImageFileName = null
         ingredientListResult = null
         img_captured.setImageDrawable(null)

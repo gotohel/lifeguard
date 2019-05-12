@@ -16,7 +16,7 @@ class MyApplication: Application() {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
         fun toastDebug(message: String) {
-            if (BuildConfig.DEBUG) {
+            if (BuildConfig.DEBUG_MODE) {
                 Toast.makeText(context, "[DEBUG]$message", Toast.LENGTH_SHORT).show()
             }
         }
