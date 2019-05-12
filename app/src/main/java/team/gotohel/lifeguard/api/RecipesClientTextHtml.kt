@@ -46,7 +46,7 @@ class RecipesClientTextHtml() {
             return Single.create<List<Pair<String, String?>>> {
                 try {
                     // 해당 웹페이지의 document
-                    val document = Jsoup.parse(html)
+                    val document = Jsoup.parse(html).select(".spoonacular-ingredient")
                     val r =  document.select(".spoonacular-name")
                         .map {
                             val name = it.html()

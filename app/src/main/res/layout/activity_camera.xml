@@ -120,8 +120,8 @@
 
         <ImageButton
                 android:onClick="finishActivity"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="@dimen/back_button_size"
+                android:layout_height="@dimen/back_button_size"
                 android:foreground="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_arrow_left_white_24dp"
                 android:background="@color/transparent"/>
@@ -193,7 +193,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
                 app:cardElevation="0dp"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="6dp"
                 android:layout_gravity="center">
 
             <LinearLayout
@@ -213,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-                        android:text="Recognizing.."/>
+                        android:text="Recognizing..."/>
 
             </LinearLayout>
 

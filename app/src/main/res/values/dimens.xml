@@ -6,4 +6,5 @@
 
     <dimen name="status_bar_height">60dp</dimen>
     <dimen name="navigation_bar_height">48dp</dimen>
+    <dimen name="back_button_size">52dp</dimen>
 </resources>

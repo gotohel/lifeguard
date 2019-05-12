@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="534dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginBottom="60dp">
+
+        <ImageView
+                android:id="@+id/img_phoro_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="17dp"
+                android:layout_marginBottom="16dp"/>
+
+        <ImageView
+                android:id="@+id/img_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_success"/>
+
+    </FrameLayout>
+
+    <TextView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:paddingHorizontal="28dp"
+            android:gravity="center_vertical"
+            android:fontFamily="serif"
+            android:textSize="25sp"
+            android:text="FireMeat Pizza"/>
+
+    <LinearLayout
+            android:id="@+id/part_success_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:background="@color/green"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:text="Safe!"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/green_light"
+                android:paddingVertical="10dp"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:text="The food does not contain allergies\nthat react to your body."/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/part_warning_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:background="@color/red_main"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:text="Warning!"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/red_light_2"
+                android:paddingVertical="10dp"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:text="The food contains allergies\nthat react to your body."/>
+
+
+        <TextView
+                android:id="@+id/text_warning_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/red_light_2"
+                android:paddingTop="4dp"
+                android:paddingBottom="20dp"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="Egg, Milk"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

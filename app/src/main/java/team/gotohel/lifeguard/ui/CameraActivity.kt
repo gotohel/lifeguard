@@ -1,5 +1,6 @@
 package team.gotohel.lifeguard.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -20,6 +21,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_camera.*
 import team.gotohel.lifeguard.R
 import team.gotohel.lifeguard.api.*
+import team.gotohel.lifeguard.ui.ResultActivity.Companion.KEY_IMAGE_FILE_NAME
+import team.gotohel.lifeguard.ui.ResultActivity.Companion.KEY_INGREDIENT_LIST
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.Exception
@@ -28,6 +31,7 @@ class CameraActivity : AppCompatActivity() {
     companion object {
         const val TEXT_SIZE_LARGE = 25F
         const val TEXT_SIZE_SMALL = 13F
+        const val LIFEGUARD_FOLDER_NAME = "lifeguard"
     }
 
     enum class MODE {
@@ -142,7 +146,7 @@ class CameraActivity : AppCompatActivity() {
 
     fun saveImageToFile(data: ByteArray): Single<String> {
         return Single.create {
-            val folder = File(getExternalStorageDirectory(), "lifeguard")
+            val folder = File(getExternalStorageDirectory(), LIFEGUARD_FOLDER_NAME)
             if (!folder.exists()) {
                 folder.mkdir()
             }
@@ -167,7 +171,12 @@ class CameraActivity : AppCompatActivity() {
     fun checkResultAndGoToNextActivity() {
         Log.d("테스트", "checkResultAndGoToNextActivity")
         if (savedImageFileName != null && ingredientListResult != null) {
-            Toast.makeText(this, "고고고고", Toast.LENGTH_SHORT).show()
+            finish()
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(KEY_IMAGE_FILE_NAME, savedImageFileName)
+            intent.putExtra(KEY_INGREDIENT_LIST, ingredientListResult as? ArrayList<Pair<String, String?>>)
+
+            startActivity(intent)
         } else {
             Log.d("테스트", "checkResultAndGoToNextActivity failed")
         }
