@@ -11,6 +11,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import team.gotohel.lifeguard.BuildConfig
+import team.gotohel.lifeguard.MyApplication
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -83,7 +84,7 @@ class NutritionixClient() {
                 val raw = chain.request()
                 val authorized = raw.newBuilder()
                     .addHeader("X-RapidAPI-Host", "nutritionix-api.p.rapidapi.com")
-                    .addHeader("X-RapidAPI-Key", "53d35b92b9mshd54982400472c00p14f890jsn4f68762441b2")
+                    .addHeader("X-RapidAPI-Key", MyApplication.API_KEY_RAKUTEN)
                     .addHeader("Accept", "application/json")
                         .build()
 

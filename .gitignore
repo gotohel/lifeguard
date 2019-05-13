@@ -33,3 +33,6 @@ gen/
 
 app/release/
 app/debug/
+
+# Secret Api Keys. (HwaminSon 에게 요청)
+app/src/main/res/values/secret_api_keys.xml

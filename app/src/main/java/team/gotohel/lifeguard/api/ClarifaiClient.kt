@@ -13,6 +13,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import team.gotohel.lifeguard.BuildConfig
+import team.gotohel.lifeguard.MyApplication
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -85,7 +86,7 @@ class ClarifaiClient() {
             try {
                 val raw = chain.request()
                 val authorized = raw.newBuilder()
-                        .addHeader("Authorization", "Key 7d8c313c837b4bb684f5f3308ce5699d")
+                        .addHeader("Authorization", "Key ${MyApplication.API_KEY_CLARIFAI}")
 //                        .addHeader("AJAX", "true")
                         .addHeader("Accept", "application/json")
 //                        .addHeader("Accept-Language", MyApplication.language)

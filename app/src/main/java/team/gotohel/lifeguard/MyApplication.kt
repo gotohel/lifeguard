@@ -20,6 +20,10 @@ class MyApplication: Application() {
                 Toast.makeText(context, "[DEBUG]$message", Toast.LENGTH_SHORT).show()
             }
         }
+        val API_KEY_CLARIFAI
+                get() = instance?.resources?.getString(R.string.api_key_clarifai) ?: ""
+        val API_KEY_RAKUTEN
+                get() = instance?.resources?.getString(R.string.api_key_rakuten) ?: ""
     }
     init {
         instance = this

@@ -13,6 +13,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import team.gotohel.lifeguard.BuildConfig
+import team.gotohel.lifeguard.MyApplication
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -105,7 +106,7 @@ class RecipesClientTextHtml() {
                 val raw = chain.request()
                 val authorized = raw.newBuilder()
                     .addHeader("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
-                    .addHeader("X-RapidAPI-Key", "53d35b92b9mshd54982400472c00p14f890jsn4f68762441b2")
+                    .addHeader("X-RapidAPI-Key", MyApplication.API_KEY_RAKUTEN)
                     .addHeader("Accept", "text/html")
                     .build()
 
